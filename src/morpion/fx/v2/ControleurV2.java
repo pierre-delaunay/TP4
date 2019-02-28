@@ -39,28 +39,25 @@ public class ControleurV2 {
 			
 		}
 		
-		/* not working
-		modele.nbCoupsProperty().addListener((obsValue, oldValue, newValue) ­> {
+		modele.nbCoupsProperty().addListener((obsValue, oldValue, newValue) -> {
 			this.majNbCoups(newValue.intValue()); 
 		});
-		*/
 		
 		labelJoueur.textProperty().bind(modele.symboleJoueurCourantProperty());
 
-		
 		for (Node enfant : grille.getChildren())
 		{
 		  if (enfant instanceof Label)
 		  {
 			Label l = (Label) enfant;
-			int ligneb= (int) l.getProperties().get("gridpane­row") + 1;
-			int colonne = (int) l.getProperties().get("gridpane­column") + 1;
+			int ligne = grille.getColumnIndex(l) + 1;
+			int colonne = grille.getRowIndex(l) + 1;
 		  
-			/* not working
-			modele.casePlateauProperty(ligne, colonne).addListener((obs, oldV, newV) ­> { 
+			
+			modele.casePlateauProperty(ligne, colonne).addListener((obs, oldV, newV) -> { 
 				l.setText(modele.symboleJoueur(newV.intValue()));
 		 
-			});*/
+			});
 		  }
 		}	
 		  

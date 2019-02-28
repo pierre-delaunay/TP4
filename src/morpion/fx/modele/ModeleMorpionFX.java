@@ -17,15 +17,12 @@ public class ModeleMorpionFX implements SpecifModeleMorpions {
 
 
 	private void setValue(int ligne, int colonne, int val)
-	{
-		ligne--; colonne--;
-		plateau[ligne][colonne].setValue(val);
-
+	{	
+		plateau[ligne-1][colonne-1].setValue(val);
 	}
 	  
 	private int getValue(int ligne, int colonne) {
-		ligne--; colonne--;
-		return plateau[ligne][colonne].getValue() ;
+		return plateau[ligne-1][colonne-1].getValue() ;
 	}
 	  
 	/**
@@ -59,8 +56,8 @@ public class ModeleMorpionFX implements SpecifModeleMorpions {
 	 * Mutateur TP4
 	 * @param v
 	 */
-	public void setNbCoups(int v) {
-		nbCoupsJoues.set(v);
+	public void setNbCoups(int value) {
+		this.nbCoupsJoues.setValue(value);
 	}
 
 	/**
@@ -70,7 +67,7 @@ public class ModeleMorpionFX implements SpecifModeleMorpions {
 	@Override
 	public int getNombreCoups() {
 		
-		return nbCoupsJoues.intValue();
+		return nbCoupsJoues.getValue();
 	}
 
 	public StringProperty symboleJoueurCourantProperty()
@@ -91,8 +88,7 @@ public class ModeleMorpionFX implements SpecifModeleMorpions {
 	
 	public ReadOnlyIntegerProperty casePlateauProperty(int ligne, int colonne)
 	{
-		ligne--; colonne--;
-		return plateau[ligne][colonne].getReadOnlyProperty() ;
+		return plateau[ligne-1][colonne-1].getReadOnlyProperty() ;
 	}
 	
 	public String symboleJoueur(int val)

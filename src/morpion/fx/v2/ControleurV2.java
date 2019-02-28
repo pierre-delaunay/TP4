@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import java.awt.*;
 
 import morpion.fx.modele.ModeleMorpionFX;
 
@@ -38,12 +39,31 @@ public class ControleurV2 {
 			
 		}
 		
-		/* still buggy
+		/* not working
 		modele.nbCoupsProperty().addListener((obsValue, oldValue, newValue) ­> {
 			this.majNbCoups(newValue.intValue()); 
 		});
 		*/
+		
+		labelJoueur.textProperty().bind(modele.symboleJoueurCourantProperty());
 
+		
+		for (Node enfant : grille.getChildren())
+		{
+		  if (enfant instanceof Label)
+		  {
+			Label l = (Label) enfant;
+			int ligneb= (int) l.getProperties().get("gridpane­row") + 1;
+			int colonne = (int) l.getProperties().get("gridpane­column") + 1;
+		  
+			/* not working
+			modele.casePlateauProperty(ligne, colonne).addListener((obs, oldV, newV) ­> { 
+				l.setText(modele.symboleJoueur(newV.intValue()));
+		 
+			});*/
+		  }
+		}	
+		  
 		
 	}
 

@@ -4,20 +4,28 @@ import delaunay.diabat.tp4.SpecifModeleMorpions;
 import delaunay.diabat.tp4.SpecifModeleMorpions.Etat;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.*;
 
 public class ModeleMorpionFX implements SpecifModeleMorpions {
 
-	private int[][] tab;
+	//private int[][] plateau;
+	private ReadOnlyIntegerWrapper[][] plateau;
 	private ReadOnlyIntegerWrapper nbCoupsJoues;
 	private SpecifModeleMorpions.Etat etatJeu;
+	// Symbole désignant le joueur courant
+	private StringProperty symboleJoueurCourant;
+
 
 	private void setValue(int ligne, int colonne, int val)
 	{
-	  tab[(ligne - 1)][(colonne - 1)] = val;
+		ligne--; colonne--;
+		plateau[ligne][colonne].setValue(val);
+
 	}
 	  
 	private int getValue(int ligne, int colonne) {
-	   return tab[(ligne - 1)][(colonne - 1)];
+		ligne--; colonne--;
+		return plateau[ligne][colonne].getValue() ;
 	}
 	  
 	/**
@@ -29,12 +37,14 @@ public class ModeleMorpionFX implements SpecifModeleMorpions {
 		this.setNbCoups(0);
 	    etatJeu = SpecifModeleMorpions.Etat.J1_JOUE;
 	    
-	    tab = new int[3][3];
+	    plateau = new ReadOnlyIntegerWrapper[3][3];
 	    for (int lig = 1; lig <= 3; lig++)
 	    {
 	      for (int col = 1; col <= 3; col++)
 	        setValue(lig, col, 0);
 	    }
+	    
+	    setSymboleJoueurCourant(this.symboleJoueur(this.getJoueur()));
 
 	}
 	
@@ -63,6 +73,37 @@ public class ModeleMorpionFX implements SpecifModeleMorpions {
 		return nbCoupsJoues.intValue();
 	}
 
+	public StringProperty symboleJoueurCourantProperty()
+	{
+		return this.symboleJoueurCourant;
+	}
+
+	// Accesseurs "Java Bean" sur la valeur encapsulée
+	public String getSymboleJoueurCourant()
+	{
+		return symboleJoueurCourant.getValue();
+	}
+	
+	private void setSymboleJoueurCourant(String ch)
+	{
+		symboleJoueurCourant.setValue(ch);
+	}
+	
+	public ReadOnlyIntegerProperty casePlateauProperty(int ligne, int colonne)
+	{
+		ligne--; colonne--;
+		return plateau[ligne][colonne].getReadOnlyProperty() ;
+	}
+	
+	public String symboleJoueur(int val)
+	{
+		switch (val)
+		{
+			case 1 : return "x" ;
+			case 2 : return "o" ;
+			default : return " " ;
+		}
+	}
 	
 	/**
 	 * Scan complet pour la recherche des vainqueurs
@@ -119,11 +160,11 @@ public class ModeleMorpionFX implements SpecifModeleMorpions {
 	 */
 	public boolean estPleine() {
 		
-		for(int i = 1; i < tab.length; ++i) 
+		for(int i = 1; i < plateau.length; ++i) 
 		{
-			for(int j = 1; j < tab.length; ++j) 
+			for(int j = 1; j < plateau.length; ++j) 
 			{
-				if (tab[i][j] == 0) { return false; }
+				if (plateau[i][j].getValue() == 0) { return false; }
 			}
 		}	
 		return true;
@@ -191,7 +232,11 @@ public class ModeleMorpionFX implements SpecifModeleMorpions {
 
 	      setValue(ligne, colonne, getJoueur());
 	      this.setNbCoups(this.getNombreCoups() + 1);
+	      // ajout TP4
+	      setSymboleJoueurCourant(this.symboleJoueur(this.getJoueur()));
 	      resync();
+	      
+	      
 	    }
 	}
 	
@@ -225,11 +270,11 @@ public class ModeleMorpionFX implements SpecifModeleMorpions {
 		
 		StringBuilder str = new StringBuilder("");
 		
-		for(int i = 1; i < this.tab.length; ++i) 
+		for(int i = 1; i < this.plateau.length; ++i) 
 		{
-			for(int j = 1; j < this.tab.length; ++j) 
+			for(int j = 1; j < this.plateau.length; ++j) 
 			{
-				str.append(" " + tab[i][j] );
+				str.append(" " + plateau[i][j] );
 			}
 			
 			str.append("\r\n");
